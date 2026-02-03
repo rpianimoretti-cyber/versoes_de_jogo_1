@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo Versao 1.0</title>
+    <style>
+        /* estilização da pagina */
+
+        body {
+          background: #001;
+          display: flex;
+          justify-content: center;
+          align-items: center; 
+          color:aliceblue; 
+          height: 100vh;
+    
+        }
+        #jogo {
+            border:1px solid white;
+            width:80%;
+            height: 80%;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <canvas id="jogo">
+      
+    </canvas>
+    <script>
+        // Logica e estrutura do jogo
+        /// Midias graficas 2d
+        // variaveis de jogo 
+        const jogo = document.getElementById("jogo");
+        const ctx = jogo.getContext("2d");
+        jogo.width = 400;
+        jogo.height = 150;
+        // var teclado = document.addEventListener("Kedowm");
+        window.addEventListener("keydown", (e) => {
+            //  if(e.code === "ArrowUp" ){
+            //      jogador.posicao_altura -= jogador.velocidade;
+            //  } 
+            //  if(e.code === "ArrowDown"){
+            //     jogador.posicao_altura += jogador.velocidade;
+            //  }
+             if(e.code === "ArrowLeft") {
+                jogador.posicao_largura -= jogador.velocidade;
+             };
+             if(e.code === "ArrowRight") {
+                jogador.posicao_largura += jogador.velocidade;
+             };
+             
+             if(e.code === "KeyA") {
+                jogador.posicao_largura -= jogador.velocidade;
+             };
+
+             if(e.code ==="KeyD") {
+                jogador.posicao_largura += jogador.velocidade;
+                
+             }
+        });
+
+        var inimigos = {
+            largura:10,
+            altura:10,
+            cor: "black",
+            posicao_altura:0,
+            posicao_largura:70,
+
+            desenha(){
+                ctx.fillStyle = this.cor;
+                ctx.fillRect(
+                    this.posicao_largura,
+                    this.posicao_altura,
+                    this.largura, this.altura )
+            }
+            
+        };
+
+
+        var jogador ={
+           largura: 20,
+           altura: 20,
+           cor:"#a69c9c",
+           posicao_altura:100,
+           posicao_largura:10,
+           velocidade:5,
+           vidas:3,
+           vivo:true,
+           
+           // funções dentro de jogador
+           desenha(){
+            altura = this.altura;
+            largura = this.largura;
+            
+           //ctx.clearRect(0,0,jogo.width, jogo.height);
+           
+            ctx.fillStyle =this.cor;
+            ctx.fillRect(this.posicao_largura,this.posicao_altura ,this.largura,this.altura);
+           },
+
+           colisao(){
+            // Limites bordas de jogo
+            if(this.posicao_largura<0){ 
+                this.posicao_largura=0;
+            }
+            if(this.posicao_altura<0) {
+                this.posicao_altura=0;
+            }
+            if(this.posicao_largura + this.largura >jogo.width){
+                this.posicao_largura = jogo.width-this.largura;
+            }
+            if(this.posicao_altura + this.altura >jogo.height){
+                this.posicao_altura = jogo.height-this.altura;
+            }
+
+
+           },
+
+        //    recorde(){
+        //      if(this.recorde < pontuacao_atual ){
+        //         this.recorde = pontuacao_atual;
+        //         localStorage(this.recorde);
+        //         alert(this.recorde)
+        //      }
+        //    }
+
+
+        };
+
+        
+
+        var chao = {
+            cor:"#026b19",
+            largura:jogo.width,
+            altura:50,
+            posicao_largura:0,
+            posicao_altura:120,
+
+            desenha(){
+                ctx.fillStyle = this.cor;
+                ctx.fillRect(this.posicao_largura,this.posicao_altura,this.largura,this.altura);
+           
+                
+            }
+        };
+
+        var ceu = {
+            cor:"#040542",
+            largura:jogo.width,
+            altura:jogo.height,
+            posicao_largura:0,
+            posicao_altura:0,
+
+            desenha(){
+                ctx.fillStyle = this.cor;
+                ctx.fillRect(this.posicao_largura,this.posicao_altura,this.largura,this.altura);
+    
+            }
+        };
+
+
+        var menu ={
+            pontuacao_atual:0,
+            tempo:30,
+            cor:"#f2c705",
+            
+            desenha(){
+              ctx.font = "10px Arial";
+              ctx.fillStyle = this.cor;
+              ctx.fillText("Vidas : ",2,10)   
+              ctx.fillText("pontos : ",330,10)   
+            }
+        };
+
+        
+        // Conjunto de funçoes e mecanicas 
+       
+
+
+
+        function Desenha(){
+            ctx.clearRect(0,0,jogo.width,jogo.height);
+            ceu.desenha();
+            chao.desenha();
+            jogador.desenha();
+            inimigos.desenha();
+            menu.desenha();
+             
+        }
+        
+        function Colisao(){
+            jogador.colisao();
+        }
+        function jogo_loop(){
+            Desenha();
+            Colisao();
+            requestAnimationFrame(jogo_loop)
+        }
+        
+        // inicio 
+        jogo_loop();
+    </script>
+</body>
+</html>
